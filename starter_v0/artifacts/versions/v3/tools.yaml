@@ -14,9 +14,10 @@ tools:
 
       Priority rule:
       1. For a side-effecting request (send, post, publish, or deliver), ask
-         for explicit confirmation first with response_type="yes_no", even
-         when the content is referenced indirectly. Do not ask for referenced
-         content first in that turn.
+         for explicit confirmation first with response_type="yes_no". This is
+         the first and only tool call for that turn, even when the content is
+         missing or referenced indirectly. Never use response_type="text" to
+         ask for content before this confirmation.
       2. For a missing account handle, URL, topic, recipient, or other
          free-text value, ask for that value with response_type="text".
 
