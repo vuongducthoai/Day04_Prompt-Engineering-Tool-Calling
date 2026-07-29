@@ -3,5 +3,106 @@
   "dataset_role": "group",
   "description": "Template để NHÓM tự viết đúng 10 case: 5 single-turn dùng query và 5 multi-turn dùng turns. Mỗi case cần: id, phase='B', failure_type (thuộc allowed_failure_types), expect (tool_calls[...] hoặc no_tool=true), và metadata.what_it_tests. File để trống có chủ đích vì mỗi nhóm phải tự thiết kế các case này.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_single_policy_privacy",
+      "phase": "B",
+      "query": "Theo policy nội bộ, có được đưa API key vào công cụ AI bên ngoài không?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "policy", "args": {"policy_area": "data_privacy"}}]},
+      "metadata": {"what_it_tests": "Internal privacy rule routes to policy with data_privacy."}
+    },
+    {
+      "id": "G02_single_paper_sort",
+      "phase": "B",
+      "query": "Tìm 3 paper arXiv mới nhất về AI agents.",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "papers", "args": {"query": "AI agents", "max_results": 3, "sort_by": "lastUpdatedDate"}}]},
+      "metadata": {"what_it_tests": "Academic discovery preserves topic, count, and newest-first ordering."}
+    },
+    {
+      "id": "G03_single_confirm_first",
+      "phase": "B",
+      "query": "Đăng bản tin này lên Telegram giúp mình.",
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+      "metadata": {"what_it_tests": "Publishing request asks yes/no confirmation before requesting referenced content."}
+    },
+    {
+      "id": "G04_single_source_compare",
+      "phase": "B",
+      "query": "So sánh mức độ đồng thuận giữa hai nguồn đã có: Nguồn A nói 'Model đạt 80 điểm.'; Nguồn B cũng nói 'Model đạt 80 điểm.'.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "source_compare", "args": {"criterion": "agreement"}}]},
+      "metadata": {"what_it_tests": "Explicit comparison of two supplied source items routes to source_compare, not search."}
+    },
+    {
+      "id": "G05_single_source_compare_missing_items",
+      "phase": "B",
+      "query": "So sánh các nguồn về GPT-5 xem nguồn nào đúng hơn.",
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
+      "metadata": {"what_it_tests": "Comparison without supplied source items requires clarification and must not verify sources."}
+    },
+    {
+      "id": "G06_multi_carry_handle_count",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Lấy tweet mới của Elon Musk."},
+        {"role": "user", "content": "Cho mình 4 bài thôi."},
+        {"role": "user", "content": "Vẫn tài khoản đó, làm ngay nhé."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "timeline", "args": {"screenname": "elonmusk", "limit": 4}}]},
+      "metadata": {"what_it_tests": "Carries known account and corrected count across turns."}
+    },
+    {
+      "id": "G07_multi_latest_topic",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Tìm tin AI hôm nay."},
+        {"role": "user", "content": "Đổi sang cybersecurity."},
+        {"role": "user", "content": "Chỉ chủ đề mới, vẫn là tin hôm nay."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "lookup", "args": {"query": "cybersecurity", "topic": "news", "timeframe": "day"}}]},
+      "metadata": {"what_it_tests": "Latest topic replaces earlier topic while news timeframe is preserved."}
+    },
+    {
+      "id": "G08_multi_url_then_fetch",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Tóm tắt bài viết này."},
+        {"role": "user", "content": "Đây là link: https://example.com/report"},
+        {"role": "user", "content": "Chỉ đọc đúng link đó."}
+      ],
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "fetch", "args": {"url": "https://example.com/report"}}]},
+      "metadata": {"what_it_tests": "Fetch occurs only after a concrete URL is supplied in context."}
+    },
+    {
+      "id": "G09_multi_cancel",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Tìm tweet về OpenAI."},
+        {"role": "user", "content": "Thôi không cần tìm nữa."},
+        {"role": "user", "content": "Bạn có thể làm gì?"}
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {"no_tool": true},
+      "metadata": {"what_it_tests": "Latest capability question is answered directly after cancellation."}
+    },
+    {
+      "id": "G10_multi_source_compare_after_collection",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Nguồn A: Báo cáo nói doanh thu tăng 10%."},
+        {"role": "user", "content": "Nguồn B: Báo cáo khác nói doanh thu tăng 20%."},
+        {"role": "user", "content": "So sánh các điểm có thể mâu thuẫn giữa hai nguồn trên."}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "source_compare", "args": {"criterion": "conflicts"}}]},
+      "metadata": {"what_it_tests": "Uses source_compare only for a user-requested comparison of two context items."}
+    }
+  ]
 }
