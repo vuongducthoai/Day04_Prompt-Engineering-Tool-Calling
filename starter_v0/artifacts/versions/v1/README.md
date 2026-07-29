@@ -4,20 +4,20 @@
 
 - Provider: `openai`
 - Suite: `base`
-- Run file: `runs/v0_B_base_openai_20260729T101359397246.json`
-- Artifact version: `v0+pf0c107a9d7a1+t011c271ef0bb`
-- Prompt hash: `eb1c8179815bd79d34de7d326420bb99b3072e6e8ae96464c02d4411f905fc68`
-- Tools hash: `6cdb53d5d7b8de80d60b298b1357f462cedbedfae261d5ba60b08ccc401687c5`
+- Run file: `runs/v1_B_base_openrouter_20260729T151853283420.json`
+- Artifact version: `v1+p87d2e5cc289d+t011c271ef0bb`
+- Prompt hash: `87d2e5cc289d016050b2283a93f1037b348e57b6528e16173ad026b8e8816c05`
+- Tools hash: `011c271ef0bbad1e19a5d7b660b2ed481b7d72950f1faa8a0798c3bdd8784ee1`
 
 ## Metrics
 
 - Total cases: 20
 - Measured cases: 20
 - Provider error cases: 0
-- Passed cases: 14
-- Case accuracy: 0.7
-- Tool routing accuracy: 0.75
-- Argument accuracy: 0.7
+- Passed cases: 18
+- Case accuracy: 0.9
+- Tool routing accuracy: 1.0
+- Argument accuracy: 0.9
 - Multiturn accuracy: 1.0
 
 ## Failed cases
@@ -31,6 +31,9 @@
 
 ## Baseline observation
 
-The starter prompt encourages guessing missing arguments, selecting only one tool,
-and performing sensitive actions without explicit confirmation. This artifact is
-preserved as the baseline before prompt and tool-declaration optimization.
+Sau khi tinh chỉnh mô tả tool `lookup`, agent đạt độ chính xác 90% (18/20 case).
+Khả năng định tuyến tool đạt 100% và hầu hết các tham số được suy luận chính xác.
+Các lỗi còn lại chủ yếu liên quan đến:
+- Thiếu `response_type` khi gọi `clarify` trong trường hợp thiếu URL.
+- Chưa yêu cầu xác nhận dạng `yes_no` trước các hành động gửi nội dung.
+Những vấn đề này sẽ được xử lý ở các phiên bản tiếp theo.
