@@ -1,0 +1,436 @@
+{
+  "run_id": "v3_B_group_openrouter_20260729T155957780238",
+  "version": "v3",
+  "artifact_version": "v3+p7e4ab0940e48+tc26f50b256ea",
+  "prompt_hash": "7e4ab0940e481f87ccf4db09512b8e23d165df74632ec5d63372ae4d647d51ec",
+  "tools_hash": "c26f50b256ea6dad3fb9fba1cb7a3db8cc60bd98e0488e19a36cee047500c167",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "/home/linux-mint-cb303/Desktop/AI_Thuc_Chien/Lab/Day04_Prompt-Engineering-Tool-Calling/starter_v0/artifacts/system_prompt.md",
+  "tools": "/home/linux-mint-cb303/Desktop/AI_Thuc_Chien/Lab/Day04_Prompt-Engineering-Tool-Calling/starter_v0/artifacts/tools.yaml",
+  "eval_cases": "data/eval_group.json",
+  "dataset_id": "day04_v2_research_group",
+  "dataset_role": "group",
+  "description": "Template để NHÓM tự viết đúng 10 case: 5 single-turn dùng query và 5 multi-turn dùng turns. Mỗi case cần: id, phase='B', failure_type (thuộc allowed_failure_types), expect (tool_calls[...] hoặc no_tool=true), và metadata.what_it_tests. File để trống có chủ đích vì mỗi nhóm phải tự thiết kế các case này.",
+  "generated_at": "2026-07-29T15:59:57",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 0,
+    "provider_error_cases": 10,
+    "passed_cases": 0,
+    "case_accuracy": 0.0,
+    "failure_counts": {},
+    "observed_mismatch_counts": {}
+  },
+  "results": [
+    {
+      "id": "G01_single_general_web_research",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Nghiên cứu web tổng quan phải dùng lookup với topic=general, không chuyển sang tìm mạng xã hội hay tin thời sự."
+      },
+      "input": "Tìm thông tin tổng quan về pin thể rắn.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "pin thể rắn",
+              "topic": "general"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: OPENROUTER_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G02_single_social_top_limit",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Giữ nguyên từ khóa, nhận diện yêu cầu phổ biến là Top và trích đúng số lượng 7."
+      },
+      "input": "Tìm 7 bài đăng phổ biến nhất về điện toán lượng tử trên mạng xã hội.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "điện toán lượng tử",
+              "search_type": "Top",
+              "limit": 7
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: OPENROUTER_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G03_single_missing_url",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Yêu cầu đọc bài viết nhưng không có URL cụ thể phải hỏi xin đường dẫn, không tự tìm hoặc tự đoán bài báo."
+      },
+      "input": "Đọc bài báo về an toàn AI mà tôi vừa nhắc rồi tóm tắt giúp tôi.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: OPENROUTER_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G04_single_confirm_before_publish",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Với yêu cầu đăng nội dung được tham chiếu gián tiếp, xác nhận yes/no là ranh giới đầu tiên trước khi hỏi nội dung hoặc gọi send."
+      },
+      "input": "Đăng nội dung trong bản nháp đó lên kênh cộng đồng ngay bây giờ.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: OPENROUTER_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G05_single_cancelled_research",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Yêu cầu hủy không cần tra cứu hay gọi bất kỳ tool nào."
+      },
+      "input": "Hủy việc tìm kiếm vừa rồi, tôi không cần thêm thông tin nữa.",
+      "expect": {
+        "no_tool": true
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: OPENROUTER_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G06_multi_turn_preserve_news_timeframe",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Lượt cuối cần giữ loại tin và mốc tháng, đồng thời dùng chủ đề mới thay cho robot."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm tin tức về robot trong tháng này."
+        },
+        {
+          "role": "user",
+          "content": "Đổi chủ đề sang xe tự lái."
+        },
+        {
+          "role": "user",
+          "content": "Vẫn giới hạn trong tháng này nhé."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "xe tự lái",
+              "topic": "news",
+              "timeframe": "month"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: OPENROUTER_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G07_multi_turn_url_then_fetch",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Sau khi URL đã xuất hiện trong ngữ cảnh, yêu cầu tóm tắt bài đó phải dùng fetch với chính URL này thay vì lookup."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tôi muốn đọc một bài phân tích về mô hình ngôn ngữ."
+        },
+        {
+          "role": "user",
+          "content": "Đây là đường dẫn: https://example.org/reports/llm-analysis"
+        },
+        {
+          "role": "user",
+          "content": "Hãy tóm tắt đúng bài ở link đó."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://example.org/reports/llm-analysis"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: OPENROUTER_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G08_multi_turn_handle_correction",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Phải áp dụng sửa đổi tài khoản ở lượt trước, giữ handle mới và kết hợp giới hạn 2 từ lượt cuối."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Lấy bài đăng mới nhất của @openai."
+        },
+        {
+          "role": "user",
+          "content": "Không, hãy lấy của @AnthropicAI."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ cần 2 bài mới nhất."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "AnthropicAI",
+              "limit": 2
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: OPENROUTER_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G09_multi_turn_confirmation_priority",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Dù nội dung vẫn được tham chiếu mơ hồ, yêu cầu xuất bản ở lượt cuối phải hỏi xác nhận trước tiên."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Chuẩn bị đăng bản tổng hợp nghiên cứu mới."
+        },
+        {
+          "role": "user",
+          "content": "Nội dung nằm trong ghi chú tôi đã nói tới."
+        },
+        {
+          "role": "user",
+          "content": "Cứ xuất bản nó đi."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: OPENROUTER_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G10_multi_turn_out_of_scope_latest",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Chỉ yêu cầu cuối được chấm; câu giải thích kiến thức phổ thông nằm ngoài phạm vi research-tool và không được kích hoạt tool từ ngữ cảnh cũ."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm tin mới về năng lượng mặt trời."
+        },
+        {
+          "role": "user",
+          "content": "Không cần tìm tin nữa."
+        },
+        {
+          "role": "user",
+          "content": "Giải thích định lý Pythagore cho học sinh lớp 6."
+        }
+      ],
+      "expect": {
+        "no_tool": true
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: OPENROUTER_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    }
+  ]
+}
