@@ -9,41 +9,14 @@
 tools:
   # ---------------- Core tools ----------------
   - name: clarify
-    description: >
-      Ask exactly one clarification or confirmation question.
-
-      Priority rule:
-      1. For a side-effecting request (send, post, publish, or deliver), ask
-         for explicit confirmation first with response_type="yes_no", even
-         when the content is referenced indirectly. Do not ask for referenced
-         content first in that turn.
-      2. For a missing account handle, URL, topic, recipient, or other
-         free-text value, ask for that value with response_type="text".
-
-      Never guess missing values or confirmation. Always include response_type
-      explicitly in tool arguments.
+    description: "Gửi một câu hỏi cho người dùng."
     parameters:
       type: object
       properties:
-        question:
-          type: string
-          default: ""
-          description: "Ask for one missing value or explicit confirmation."
-        response_type:
-          type: string
-          enum: [text, yes_no, choice]
-          default: "text"
-          description: >
-            This argument must always be included. Use text for a missing
-            free-text value, yes_no for confirmation, and choice only with
-            explicit options.
-        options:
-          type: array
-          default: []
-          items:
-            type: string
-          description: "Keep empty unless response_type is choice."
-      required: [question, response_type]
+        question: {type: string, default: "", description: "Câu hỏi"}
+        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "Kiểu trả lời"}
+        options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn"}
+      required: [question]
 
   - name: timeline
     description: "Lấy các bài đăng gần đây."
@@ -106,26 +79,12 @@ tools:
 
   # ---------------- Bonus tools ----------------
   - name: send
-    description: >
-      Perform a side-effecting send, post, publish, or delivery action.
-
-      Do not call this tool on the initial request. First call clarify with
-      response_type="yes_no" and request explicit confirmation. Call send only
-      after the user has clearly confirmed the exact action; an initial action
-      request or draft is not confirmation.
+    description: "Gửi một đoạn văn bản đi."
     parameters:
       type: object
       properties:
-        text:
-          type: string
-          default: ""
-          description: "Exact content to send only after explicit confirmation."
-        confirmed:
-          type: boolean
-          default: false
-          description: >
-            Set true only after the user explicitly confirms the proposed
-            action; never infer confirmation from an original or vague request.
+        text: {type: string, default: "", description: "Nội dung"}
+        confirmed: {type: boolean, default: false, description: "Cờ xác nhận"}
       required: [text]
 
   - name: policy
@@ -157,33 +116,3 @@ tools:
         max_pages: {type: integer, default: 5, description: "Số trang"}
         max_chars: {type: integer, default: 8000, description: "Số ký tự"}
       required: [arxiv_url]
-
-  - name: source_compare
-    description: >
-      Compare two or more source items already collected. This tool analyzes
-      only supplied text and metadata; it does not search, fetch, verify facts,
-      decide which source is correct, or rank source trustworthiness.
-    parameters:
-      type: object
-      properties:
-        items:
-          type: array
-          minItems: 2
-          items:
-            type: object
-            properties:
-              title: {type: string}
-              url: {type: string}
-              source: {type: string}
-              summary: {type: string}
-              section: {type: string}
-              published_at: {type: string}
-        criterion:
-          type: string
-          enum: [coverage, agreement, conflicts]
-          default: coverage
-        max_items:
-          type: integer
-          default: 5
-          minimum: 2
-      required: [items]

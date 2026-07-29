@@ -157,33 +157,3 @@ tools:
         max_pages: {type: integer, default: 5, description: "Số trang"}
         max_chars: {type: integer, default: 8000, description: "Số ký tự"}
       required: [arxiv_url]
-
-  - name: source_compare
-    description: >
-      Compare two or more source items already collected. This tool analyzes
-      only supplied text and metadata; it does not search, fetch, verify facts,
-      decide which source is correct, or rank source trustworthiness.
-    parameters:
-      type: object
-      properties:
-        items:
-          type: array
-          minItems: 2
-          items:
-            type: object
-            properties:
-              title: {type: string}
-              url: {type: string}
-              source: {type: string}
-              summary: {type: string}
-              section: {type: string}
-              published_at: {type: string}
-        criterion:
-          type: string
-          enum: [coverage, agreement, conflicts]
-          default: coverage
-        max_items:
-          type: integer
-          default: 5
-          minimum: 2
-      required: [items]
