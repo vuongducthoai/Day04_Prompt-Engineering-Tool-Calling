@@ -1,1 +1,3 @@
 version,author,changed_artifact,artifact_version,prompt_hash,tools_hash,reason,hypothesis,metric_name,metric_before,metric_after,run_file
+v0,team,baseline,v0+peb1c8179815b+t6cdb53d5d7b8,eb1c8179815b,6cdb53d5d7b8,baseline chua sua gi,Do hanh vi goc truoc khi toi uu,case_accuracy,,0.65,runs/v0_B_base_openrouter_20260729T153303700198.json
+v1,team,system_prompt.md + tools.yaml,v1+p20b081ae203b+t9e71fc267c70,20b081ae203b,9e71fc267c70,Viet lai system prompt 5 phan + lam ro WHEN/WHEN-NOT va arg convention trong tools.yaml,Baseline mo ho ve routing timeline/social_search/lookup/fetch, thieu rule hoi lai va xac nhan truoc khi gui,case_accuracy,0.65,0.85,runs/v1_B_base_openrouter_20260729T154323202156.json

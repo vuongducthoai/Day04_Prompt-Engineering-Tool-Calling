@@ -966,6 +966,7 @@ with tab_tools:
                 Browse the active tool schema and quickly inspect each declaration, its parameters, and its purpose.
             </div>
         </div>
+
         """,
         unsafe_allow_html=True,
     )
@@ -983,3 +984,4 @@ with tab_tools:
                 st.json(t_params)
     else:
         st.error("artifacts/tools.yaml not found.")
+
